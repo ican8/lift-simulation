@@ -1,0 +1,46 @@
+.btn{
+    border-radius: 12px;
+    font-size: large;
+    margin: 10px;
+    color: white;
+}
+
+.up{
+    background-color: coral;
+}
+
+.down{
+    background-color: rgb(48, 128, 48);
+}
+
+.container{
+    background-color:beige;
+}
+
+.floor{
+    margin: 15px;
+    height: 120px;
+}
+
+.floor-text{
+    font-size: large;
+    font-weight: 700;
+    position: relative;
+    left: 1200px;
+}
+
+.header{
+    font-size: larger;
+    font-weight: 800;
+    margin: 50px 50px;
+    text-align: center;
+}
+
+.lift{
+    background-color: olivedrab;
+    height: 100px;
+    width: 70px;
+    position: absolute;
+    left: 10%;
+    bottom: 250px;
+}
