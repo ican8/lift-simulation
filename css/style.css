@@ -1,7 +1,7 @@
 .btn{
-    border-radius: 12px;
+    border-radius: 15%;
     font-size: large;
-    margin: 10px;
+    margin: 1%;
     color: white;
 }
 
@@ -15,32 +15,45 @@
 
 .container{
     background-color:beige;
+    position: relative;
 }
 
 .floor{
-    margin: 15px;
-    height: 120px;
+    height: 20%;
+    position: relative;
 }
 
 .floor-text{
     font-size: large;
     font-weight: 700;
-    position: relative;
-    left: 1200px;
+    position: absolute;
+    left: 90%;
 }
 
 .header{
-    font-size: larger;
+    font-size: x-large;
     font-weight: 800;
-    margin: 50px 50px;
+    margin: 2% 5%;
     text-align: center;
+}
+
+.hr{
+    margin: 0;
+}
+
+.input-box{
+    font-size: x-large;
+    font-weight: 400;
+    position: relative;
+    left: 80%;
+    margin: 2%;
 }
 
 .lift{
     background-color: olivedrab;
-    height: 100px;
-    width: 70px;
+    height: 80%;
+    width: 5%;
     position: absolute;
-    left: 10%;
-    bottom: 250px;
+    left: 15%;
+    bottom: 1%;
 }
