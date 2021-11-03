@@ -2,6 +2,7 @@
 let lift = document.createElement("div");
 lift.className = "lift";
 lift.id = "lift";
+let currentFloor = 1;
 
 function createFloor(floor_number) {
   let container = document.getElementById("container");
@@ -47,11 +48,19 @@ function moveLift(e) {
   else if(clicked_on.startsWith('down'))
     n = Number(clicked_on.substring(4,clicked_on.length));
   console.log('go to floor ',n);
-  let target_floor = document.getElementById("floor" + n);
-  target_floor.insertBefore(
-    lift,
-    target_floor.childNodes[target_floor.childNodes.length - 1]
-  );
+  let distance = -1*(n-1)*120 ;
+  lift.style.transform = `translateY(${distance}%)`
+  // lift.style.transform = `translateY(${-620 }%)`
+  let time = 2 * Math.abs(currentFloor - n);
+  lift.style.transitionDuration = `${time}s`;
+  console.log('ETA- ',Math.abs(currentFloor - n));
+  currentFloor = n;
+  // console.log('Current floor - ',c);
+  // let target_floor = document.getElementById("floor" + n);
+  // target_floor.insertBefore(
+  //   lift,
+  //   target_floor.childNodes[target_floor.childNodes.length - 1]
+  // );
 }
 
 function getButtons(){
@@ -77,6 +86,8 @@ function make_floors() {
   for (let i = 1; i <= no_of_floors; i++) {
     createFloor(i);
   }
+  lift.style.transform = null
+  lift.style.transitionDuration = null
   // set initial position of lift
   console.log(lift);
   let first_floor = document.getElementById("floor1");

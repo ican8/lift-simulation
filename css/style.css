@@ -1,8 +1,9 @@
 .btn{
-    border-radius: 15%;
+    border-radius: 12%;
     font-size: large;
     margin: 1%;
     color: white;
+    width: 5%;
 }
 
 .up{
@@ -56,4 +57,5 @@
     position: absolute;
     left: 15%;
     bottom: 1%;
+    display: block;
 }
