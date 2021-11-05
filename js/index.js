@@ -48,7 +48,7 @@ function moveLift(e) {
   else if(clicked_on.startsWith('down'))
     n = Number(clicked_on.substring(4,clicked_on.length));
   console.log('go to floor ',n);
-  let distance = -1*(n-1)*120 ;
+  let distance = -1*(n-1)*100 ;
   lift.style.transform = `translateY(${distance}%)`
   // lift.style.transform = `translateY(${-620 }%)`
   let time = 2 * Math.abs(currentFloor - n);
