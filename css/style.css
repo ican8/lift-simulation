@@ -1,3 +1,9 @@
+
+body{
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 .btn{
     border-radius: 12%;
     font-size: large;
@@ -29,6 +35,15 @@
     font-weight: 700;
     position: absolute;
     left: 90%;
+}
+
+.footer{
+    text-align: center;
+    font-size: large;
+    position: relative;
+    bottom: 0;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 
 .header{
