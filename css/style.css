@@ -66,11 +66,28 @@ body{
 }
 
 .lift{
-    background-color: olivedrab;
+    background-color: black;
     height: 100%;
     width: 5%;
-    position: absolute;
+    overflow: hidden;
+    position: absolute; 
     left: 15%;
     bottom: 1%;
     display: block;
+}
+
+.door{
+    background-color: gray;
+    width: 50%; /* Each panel takes up half the container */
+    height: 100%; /* Used for demo purposes */
+    position: relative; 
+    z-index: 2;
+}
+
+.door-left{
+    float: left;
+}
+
+.door-right{
+    float: right;   
 }

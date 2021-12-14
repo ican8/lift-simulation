@@ -2,6 +2,13 @@
 let lift = document.createElement("div");
 lift.className = "lift";
 lift.id = "lift";
+let left_door = document.createElement("div");
+let right_door = document.createElement("div");
+left_door.classList.add("door","door-left")
+right_door.classList.add("door","door-right")
+lift.appendChild(left_door)
+lift.appendChild(right_door)
+
 let currentFloor = 1;
 
 function createFloor(floor_number) {
@@ -40,6 +47,29 @@ function createFloor(floor_number) {
   container.insertBefore(new_div, container.childNodes[0]);
 }
 
+function closeDoor(){
+  // console.log('START CLOSE DOOR ANIMATION!')
+  let left_door = document.getElementsByClassName('door-left')[0];
+  let right_door = document.getElementsByClassName('door-right')[0];
+  left_door.style.transform = `translateX(0)`;
+  right_door.style.transform = `translateX(0)`;
+  left_door.style.transition = `all 2.5s ease-out`;
+  right_door.style.transition = `all 2.5s ease-out`;
+}
+
+function doorAnimation(){
+  lift.removeEventListener('webkitTransitionEnd',doorAnimation)
+  // console.log('START DOOR ANIMATION!')
+  let left_door = document.getElementsByClassName('door-left')[0];
+  let right_door = document.getElementsByClassName('door-right')[0];
+  right_door.addEventListener('webkitTransitionEnd',closeDoor)
+  left_door.style.transform = `translateX(-100%)`;
+  right_door.style.transform = `translateX(100%)`;
+  left_door.style.transition = `all 2.5s ease-out`;
+  right_door.style.transition = `all 2.5s ease-out`;
+  
+}
+
 function moveLift(e) {
   let clicked_on = e.target.id;
   let n;
@@ -49,7 +79,10 @@ function moveLift(e) {
     n = Number(clicked_on.substring(4,clicked_on.length));
   console.log('go to floor ',n);
   let distance = -1*(n-1)*100 ;
+  // let right_door = document.getElementsByClassName('door-right')[0];
+  lift.addEventListener('webkitTransitionEnd',doorAnimation)
   lift.style.transform = `translateY(${distance}%)`
+  
   // lift.style.transform = `translateY(${-620 }%)`
   let time = 2 * Math.abs(currentFloor - n);
   lift.style.transitionDuration = `${time}s`;
@@ -96,7 +129,6 @@ function make_floors() {
     lift,
     first_floor.childNodes[first_floor.childNodes.length - 1]
   );
-
   // set up buttons to listen for click event
   getButtons()
 }
