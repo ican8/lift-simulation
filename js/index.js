@@ -74,22 +74,30 @@ function createFloor(floor_number) {
   container.insertBefore(new_div, container.childNodes[0]);
 }
 
-function closeDoor(){
-  // console.log('START CLOSE DOOR ANIMATION!')
-  let left_door = document.getElementsByClassName('door-left')[0];
-  let right_door = document.getElementsByClassName('door-right')[0];
+function closeDoor(e){
+  let target_id = e.target.id;
+  // NOTE :- BAD ASSUMPTION , MAX LIFTS = 9
+  let lift_no = target_id[target_id.length-1]
+  console.log("LIFT TARGET = ",lift_no);
+  let left_door = document.getElementById('ld'+lift_no);
+  let right_door = document.getElementById('rd'+lift_no);
   left_door.style.transform = `translateX(0)`;
   right_door.style.transform = `translateX(0)`;
   left_door.style.transition = `all 2.5s ease-out`;
   right_door.style.transition = `all 2.5s ease-out`;
 }
 
-function doorAnimation(){
+function doorAnimation(e){
+  let target_id = e.target.id;
+  // NOTE :- BAD ASSUMPTION , MAX LIFTS = 9
+  let lift_no = target_id[target_id.length-1]
+  console.log("LIFT TARGET = ",lift_no);
+  let lift = document.getElementById('l'+lift_no)
   lift.removeEventListener('webkitTransitionEnd',doorAnimation)
   // console.log('START DOOR ANIMATION!')
-  let left_door = document.getElementsByClassName('door-left')[0];
-  let right_door = document.getElementsByClassName('door-right')[0];
-  right_door.addEventListener('webkitTransitionEnd',closeDoor)
+  let left_door = document.getElementById('ld'+lift_no);
+  let right_door = document.getElementById('rd'+lift_no);
+  right_door.addEventListener('webkitTransitionEnd',closeDoor,lift_no)
   left_door.style.transform = `translateX(-100%)`;
   right_door.style.transform = `translateX(100%)`;
   left_door.style.transition = `all 2.5s ease-out`;
@@ -115,7 +123,7 @@ function moveLift(e) {
   let lift = document.getElementById('l'+lift_no)
   console.log('HERE LIFT = ',lift)
   // let right_door = document.getElementsByClassName('door-right')[0];
-  lift.addEventListener('webkitTransitionEnd',doorAnimation)
+  lift.addEventListener('webkitTransitionEnd',doorAnimation,lift_no)
   lift.style.transform = `translateY(${distance}%)`
   
   // lift.style.transform = `translateY(${-620 }%)`
