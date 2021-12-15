@@ -1,13 +1,40 @@
 // create lift
-let lift = document.createElement("div");
-lift.className = "lift";
-lift.id = "lift";
-let left_door = document.createElement("div");
-let right_door = document.createElement("div");
-left_door.classList.add("door","door-left")
-right_door.classList.add("door","door-right")
-lift.appendChild(left_door)
-lift.appendChild(right_door)
+let form = document.getElementById('form')
+form.addEventListener('click',function(e){
+  e.preventDefault();
+})
+
+let lifts = []
+
+// let lift = document.createElement("div");
+// lift.className = "lift";
+// lift.id = "l1";
+// let left_door = document.createElement("div");
+// let right_door = document.createElement("div");
+// left_door.classList.add("door","door-left")
+// right_door.classList.add("door","door-right")
+// lift.appendChild(left_door)
+// lift.appendChild(right_door)
+
+
+function createLifts(n){
+  lifts = []
+  for (let i = 1; i <= n; i++) {
+    let lift = document.createElement("div");
+    lift.className = "lift";
+    lift.id = 'l'+i;
+    let left_door = document.createElement("div");
+    let right_door = document.createElement("div");
+    left_door.classList.add("door","door-left")
+    right_door.classList.add("door","door-right")
+    left_door.id = 'ld'+i;
+    right_door.id = 'rd'+i;
+    lift.style.left = `${15 + 10*i}%`
+    lift.appendChild(left_door)
+    lift.appendChild(right_door)
+    lifts.push(lift)
+  }  
+}
 
 let currentFloor = 1;
 
@@ -70,6 +97,10 @@ function doorAnimation(){
   
 }
 
+function scheduledLift(){
+  return 1;
+}
+
 function moveLift(e) {
   let clicked_on = e.target.id;
   let n;
@@ -79,6 +110,10 @@ function moveLift(e) {
     n = Number(clicked_on.substring(4,clicked_on.length));
   console.log('go to floor ',n);
   let distance = -1*(n-1)*100 ;
+
+  let lift_no = scheduledLift();
+  let lift = document.getElementById('l'+lift_no)
+  console.log('HERE LIFT = ',lift)
   // let right_door = document.getElementsByClassName('door-right')[0];
   lift.addEventListener('webkitTransitionEnd',doorAnimation)
   lift.style.transform = `translateY(${distance}%)`
@@ -110,25 +145,38 @@ function getButtons(){
     }
 }
 
-let input = document.getElementById("input");
+let input_floors = document.getElementById("input-floors");
+let input_lifts = document.getElementById("input-lifts");
 let no_of_floors;
+let no_of_lifts;
 
 function make_floors() {
   container.innerHTML = "";
-  no_of_floors = input.value;
+  no_of_floors = input_floors.value;
+  no_of_lifts  = input_lifts.value;
   for (let i = 1; i <= no_of_floors; i++) {
     createFloor(i);
   }
-  lift.style.transform = null
-  lift.style.transitionDuration = null
-  // set initial position of lift
-  console.log(lift);
+  createLifts(no_of_lifts);
+  console.log(lifts);
+
+  for(lift of lifts){
+    lift.style.transform = null
+    lift.style.transitionDuration = null
+    // set initial position of lift
+    console.log(lift);
+  }
+
   let first_floor = document.getElementById("floor1");
   console.log(first_floor);
-  first_floor.insertBefore(
-    lift,
-    first_floor.childNodes[first_floor.childNodes.length - 1]
-  );
+
+  for(let i = lifts.length-1; i >= 0; i--){
+    first_floor.insertBefore(
+      lifts[i],
+      first_floor.childNodes[first_floor.childNodes.length - 1]
+    );
+  }
+  
   // set up buttons to listen for click event
   getButtons()
 }
