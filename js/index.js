@@ -106,7 +106,7 @@ function doorAnimation(e){
 }
 
 function scheduledLift(){
-  return 1;
+  return Math.floor(Math.random() * no_of_lifts) + 1;
 }
 
 function moveLift(e) {
@@ -120,6 +120,7 @@ function moveLift(e) {
   let distance = -1*(n-1)*100 ;
 
   let lift_no = scheduledLift();
+  console.log('RANDOMLY SELECTED LIFT = ',lift_no);
   let lift = document.getElementById('l'+lift_no)
   console.log('HERE LIFT = ',lift)
   // let right_door = document.getElementsByClassName('door-right')[0];
