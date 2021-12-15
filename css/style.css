@@ -65,7 +65,11 @@ body{
 }
 
 .lift{
-    background-color: black;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-size: 70% 60%;
+    background-position: center;
+    background-image: url('/img/man.png');
     height: 100%;
     width: 5%;
     overflow: hidden;
@@ -89,4 +93,8 @@ body{
 
 .door-right{
     float: right;   
+}
+
+.credits{
+    font-size: 8px;
 }
