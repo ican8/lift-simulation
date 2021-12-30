@@ -1,32 +1,41 @@
-let lifts = []
-let currentFloor = 1;
+let lifts = [];
+let q = [];
+// let currentFloor = 1;
 let input_floors = document.getElementById("input-floors");
 let input_lifts = document.getElementById("input-lifts");
 let no_of_floors;
 let no_of_lifts;
+let intervalId;
+let tempInterval;
 
-let form = document.getElementById('form')
-form.addEventListener('click',function(e){
+let form = document.getElementById("form");
+form.addEventListener("click", function (e) {
   e.preventDefault();
-})
+});
 
-function createLifts(n){
-  lifts = []
+function createLifts(n) {
+  lifts = [];
   for (let i = 1; i <= n; i++) {
     let lift = document.createElement("div");
     lift.className = "lift";
-    lift.id = 'l'+i;
+    lift.id = "l" + i;
     let left_door = document.createElement("div");
     let right_door = document.createElement("div");
-    left_door.classList.add("door","door-left")
-    right_door.classList.add("door","door-right")
-    left_door.id = 'ld'+i;
-    right_door.id = 'rd'+i;
-    lift.style.left = `${15 + 10*i}%`
-    lift.appendChild(left_door)
-    lift.appendChild(right_door)
-    lifts.push(lift)
-  }  
+    left_door.classList.add("door", "door-left");
+    right_door.classList.add("door", "door-right");
+    left_door.id = "ld" + i;
+    right_door.id = "rd" + i;
+    lift.style.left = `${10 + 10 * i}%`;
+    lift.appendChild(left_door);
+    lift.appendChild(right_door);
+    let liftObj = {
+      id: i,
+      lift: lift,
+      currentFloor: 1,
+      moving: false,
+    };
+    lifts.push(liftObj);
+  }
 }
 
 function createFloor(floor_number) {
@@ -65,96 +74,154 @@ function createFloor(floor_number) {
   container.insertBefore(new_div, container.childNodes[0]);
 }
 
-function closeDoor(e){
+function closeDoor(e) {
   let target_id = e.target.id;
-  let lift_no = target_id[target_id.length-1]
-  let left_door = document.getElementById('ld'+lift_no);
-  let right_door = document.getElementById('rd'+lift_no);
+  let lift_no = target_id[target_id.length - 1];
+  let left_door = document.getElementById("ld" + lift_no);
+  let right_door = document.getElementById("rd" + lift_no);
+  right_door.removeEventListener("webkitTransitionEnd", closeDoor);
   left_door.style.transform = `translateX(0)`;
   right_door.style.transform = `translateX(0)`;
   left_door.style.transition = `all 2.5s ease-out`;
   right_door.style.transition = `all 2.5s ease-out`;
+  // stop the lift only after door is closed
+  setTimeout(()=>{
+    stop_lift(lift_no);
+  },2500)
 }
 
-function doorAnimation(e){
+function stop_lift(lift_no) {
+  for (lft of lifts) {
+    if (lft.id == lift_no) {
+      lft.moving = false;
+    }
+  }
+}
+
+function doorAnimation(e) {
   let target_id = e.target.id;
   // NOTE :- BAD ASSUMPTION , MAX LIFTS = 9
-  let lift_no = target_id[target_id.length-1]
-  let lift = document.getElementById('l'+lift_no)
-  lift.removeEventListener('webkitTransitionEnd',doorAnimation)
-  let left_door = document.getElementById('ld'+lift_no);
-  let right_door = document.getElementById('rd'+lift_no);
-  right_door.addEventListener('webkitTransitionEnd',closeDoor,lift_no)
+  let lift_no = target_id[target_id.length - 1];
+  let lift = document.getElementById("l" + lift_no);
+  lift.removeEventListener("webkitTransitionEnd", doorAnimation);
+  let left_door = document.getElementById("ld" + lift_no);
+  let right_door = document.getElementById("rd" + lift_no);
+  left_door.removeEventListener("webkitTransitionEnd", doorAnimation);
+  right_door.removeEventListener("webkitTransitionEnd", doorAnimation);
+  right_door.addEventListener("webkitTransitionEnd", closeDoor);
   left_door.style.transform = `translateX(-100%)`;
   right_door.style.transform = `translateX(100%)`;
   left_door.style.transition = `all 2.5s ease-out`;
-  right_door.style.transition = `all 2.5s ease-out`;  
+  right_door.style.transition = `all 2.5s ease-out`;
 }
 
-function scheduledLift(){
-  return Math.floor(Math.random() * no_of_lifts) + 1;
+function scheduledLift(floor) {
+  let selected_lift;
+  let min_distance = Infinity;
+
+  for (lift of lifts) {
+    if (!lift.moving && Math.abs(floor - lift.currentFloor) < min_distance) {
+      min_distance = Math.abs(floor - lift.currentFloor);
+      selected_lift = lift;
+    }
+  }
+  return selected_lift;
+  // return Math.floor(Math.random() * no_of_lifts) + 1;
 }
 
-function moveLift(e) {
+function moveLift(lift, to) {
+  let distance = -1 * (to - 1) * 100;
+  let lift_no = lift.id;
+  let from = lift.currentFloor;
+  lift.currentFloor = to;
+  lift.moving = true;
+  let lft = lift.lift;
+  lft.addEventListener("webkitTransitionEnd", doorAnimation);
+  lft.style.transform = `translateY(${distance}%)`;
+  let time = 2 * Math.abs(from - to);
+  if (time === 0) {
+    // temporary code
+    // fake event object to call the doorAnimation event listener
+    let e = {};
+    e.target = {};
+    e.target.id = `l${lift_no}`;
+    doorAnimation(e);
+  }
+  lft.style.transitionDuration = `${time}s`;
+  console.log(`Moving lift ${lift_no} from floor ${from} to ${to} in ${time} sec`);
+}
+
+function save_click(e) {
   let clicked_on = e.target.id;
   let n;
-  if(clicked_on.startsWith('up'))
-    n = Number(clicked_on.substring(2,clicked_on.length));
-  else if(clicked_on.startsWith('down'))
-    n = Number(clicked_on.substring(4,clicked_on.length));
-  let distance = -1*(n-1)*100 ;
-
-  let lift_no = scheduledLift();
-  let lift = document.getElementById('l'+lift_no)
-  lift.addEventListener('webkitTransitionEnd',doorAnimation,lift_no)
-  lift.style.transform = `translateY(${distance}%)`
-  
-  let time = 2 * Math.abs(currentFloor - n);
-  lift.style.transitionDuration = `${time}s`;
-  currentFloor = n;
+  if (clicked_on.startsWith("up"))
+    n = Number(clicked_on.substring(2, clicked_on.length));
+  else if (clicked_on.startsWith("down"))
+    n = Number(clicked_on.substring(4, clicked_on.length));
+  q.push(n);
 }
 
-function getButtons(){
-    let up_btn_list = document.getElementsByClassName("up");
-    let down_btn_list = document.getElementsByClassName("down");
-    let upBtn;
-    for (up_btn of up_btn_list) {
-    up_btn.addEventListener("click", moveLift);
-    }
+function getButtons() {
+  let up_btn_list = document.getElementsByClassName("up");
+  let down_btn_list = document.getElementsByClassName("down");
+  for (up_btn of up_btn_list) {
+    up_btn.addEventListener("click", save_click);
+  }
+  for (down_btn of down_btn_list) {
+    down_btn.addEventListener("click", save_click);
+  }
+}
 
-    let downBtn;
-    for (down_btn of down_btn_list) {
-    down_btn.addEventListener("click", moveLift);
-    }
+function make_lifts() {
+  no_of_lifts = input_lifts.value;
+  createLifts(no_of_lifts);
+  for (lft of lifts) {
+    let lift = lft.lift;
+    lift.style.transform = null;
+    lift.style.transitionDuration = null;
+  }
 }
 
 function make_floors() {
   container.innerHTML = "";
   no_of_floors = input_floors.value;
-  no_of_lifts  = input_lifts.value;
+
   for (let i = 1; i <= no_of_floors; i++) {
     createFloor(i);
   }
-  createLifts(no_of_lifts);
+}
 
-  for(lift of lifts){
-    lift.style.transform = null
-    lift.style.transitionDuration = null
-  }
-
+function place_lifts() {
   let first_floor = document.getElementById("floor1");
-
-  for(let i = lifts.length-1; i >= 0; i--){
+  for (let i = lifts.length - 1; i >= 0; i--) {
     first_floor.insertBefore(
-      lifts[i],
+      lifts[i].lift,
       first_floor.childNodes[first_floor.childNodes.length - 1]
     );
   }
-  
+}
+
+function check_for_scheduling() {
+  if (q.length === 0) return;
+  floor = q.shift();
+  let lift = scheduledLift(floor);
+  if(!lift){
+    q.unshift(floor);
+    return;
+  }
+  moveLift(lift, floor);
+}
+
+function start() {
+  clearInterval(intervalId);
+  make_floors();
+  make_lifts();
+  place_lifts();
   // set up buttons to listen for click event
-  getButtons()
+  getButtons();
+  intervalId = setInterval(check_for_scheduling, 100);
 }
 
 let input_btn = document.getElementById("input-btn");
 
-input_btn.addEventListener("click", make_floors);
+input_btn.addEventListener("click", start);
