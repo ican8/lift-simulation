@@ -46,9 +46,9 @@ function createFloor(floor_number) {
   new_div.id = "floor" + floor_number;
 
   let new_up_btn = document.createElement("button");
-  let up_text = document.createTextNode("Up");
+  let up_text = document.createTextNode("Up")
   let new_down_btn = document.createElement("button");
-  let down_text = document.createTextNode("Down");
+  let down_text = document.createTextNode("Dn");
   let new_br = document.createElement("br");
   let new_hr = document.createElement("hr");
   let new_span = document.createElement("span");
@@ -214,6 +214,8 @@ function check_for_scheduling() {
 
 function start() {
   clearInterval(intervalId);
+  q = []
+  lifts = []
   make_floors();
   make_lifts();
   place_lifts();

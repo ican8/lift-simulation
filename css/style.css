@@ -1,6 +1,10 @@
 body{
     max-width: 100%;
-    overflow-x: hidden;
+    height: min-content;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    /* overflow: hidden; */
 }
 
 .btn{
@@ -8,7 +12,7 @@ body{
     font-size: large;
     margin: 1%;
     color: white;
-    width: 5%;
+    width: 4.5%;
 }
 
 .up{
@@ -39,17 +43,21 @@ body{
 .footer{
     text-align: center;
     font-size: large;
-    position: relative;
-    bottom: 0;
-    margin-top: 2%;
-    margin-bottom: 2%;
+    /* position: relative; */
+    /* bottom: 0; */
+    margin: 2% 0;
 }
 
 .header{
     font-size: x-large;
     font-weight: 800;
-    margin: 2% 5%;
     text-align: center;
+    margin: 1% 0;
+    /* padding: auto; */
+}
+
+.header h1{
+    margin: auto;
 }
 
 .hr{
@@ -59,9 +67,12 @@ body{
 .input-box{
     font-size: x-large;
     font-weight: 400;
-    position: relative;
-    left: 80%;
-    margin: 2%;
+    margin: 1% 0; 
+}
+
+.form {
+    width: fit-content;
+    margin: 0 auto;
 }
 
 .lift{
@@ -82,7 +93,7 @@ body{
 .door{
     background-color: gray;
     width: 50%; /* Each panel takes up half the container */
-    height: 100%; /* Used for demo purposes */
+    height: 100%; 
     position: relative; 
     z-index: 2;
 }
@@ -97,4 +108,69 @@ body{
 
 .credits{
     font-size: 8px;
+}
+
+@media (max-width: 1120px) and (min-width: 768px){
+    .header{
+        font-size: larger;
+        font-weight: 700;
+        margin: 2% 0;
+    }
+
+    .input-box{
+        font-size: larger;
+        font-weight: 300;
+        margin-bottom: 2%;
+    }
+
+    .btn{
+        font-size: medium;
+    }
+
+    .floor{
+        height: 25%;
+    }
+
+    .floor-text{
+        font-size: medium;
+        font-weight: 700;
+    }
+    
+    .footer{
+        font-size: medium;
+    }
+}
+
+
+@media (max-width: 768px){
+    .header{
+        font-size: large;
+        font-weight: 600;
+        margin: 2% 0;
+    }
+
+    .input-box{
+        font-size: large;
+        font-weight: 300;
+        margin-bottom: 2%;
+    }
+
+    .btn{
+        font-size: small;
+        width: fit-content;
+    }
+
+    .floor{
+        height: 40%;
+    }
+
+    .floor-text{
+        font-size: small;
+        font-weight: 700;
+    }
+    
+    .footer{
+        font-size: small;
+        margin: 1%;
+    }
 }
